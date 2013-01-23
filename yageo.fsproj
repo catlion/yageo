@@ -47,7 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model.fs" />
-    <Compile Include="YaMaps.fs" />
+    <Compile Include="YaGeo.fs" />
     <None Include="Script.fsx" />
     <None Include="packages.config" />
   </ItemGroup>
