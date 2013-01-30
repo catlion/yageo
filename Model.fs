@@ -136,7 +136,7 @@ type Precision =
     | Other of string
     with static member from_string = function
             | "exact" -> Exact
-            | "number" -> Street
+            | "number" -> Number
             | "near" -> Near
             | "street"  -> Street
             | x -> Other(x)
