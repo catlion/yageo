@@ -46,6 +46,8 @@ type GeoRequest(request: string, ?max_count: byte, ?skip:byte, ?area_center: Coo
             use wc = new WebClient()
             let res = wc.DownloadString url
             let parsed = JsonSerializer.DeserializeFromString<GeoResponse>(res)
+            let resp: GeoCollection = parsed.response
+            let gcol: Geo = resp.GeoObjectCollection
             parsed.response.GeoObjectCollection.featureMember
                 |> Seq.map (fun (i: GeoObjects) -> GeoResult.from_result i.GeoObject)
         member x.AsyncGeocode () = async {
