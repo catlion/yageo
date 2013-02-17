@@ -23,17 +23,17 @@ type Coords = {
             lat = Double.Parse(a.[1], CultureInfo.InvariantCulture)
         }
 
-// Mapping to API request params
+/// <summary>
+/// Параметры запроса к геокодеру
+/// </summary>
 type GeoRequest(request: string, ?max_count: byte, ?skip:byte, ?area_center: Coords option, ?area_size: Coords option) =
     let (!?) (s: string) = s.Trim().Replace(Environment.NewLine, String.Empty) |> System.Web.HttpUtility.UrlEncode
     let mutable geocode = request
-    //let key = key
     let ll = defaultArg area_center None
     let spn = defaultArg area_size None
     let rspn = if area_center <> None && area_size <> None then 1uy else 0uy
     let results = defaultArg max_count 10uy
     let skip = defaultArg skip 0uy
-    //let lang = defaultArg lang `ru-RU`
     with
         member x.Address with get() = geocode and set(v) = geocode <- v
         override x.ToString() =
@@ -41,22 +41,22 @@ type GeoRequest(request: string, ?max_count: byte, ?skip:byte, ?area_center: Coo
                       | 1uy -> sprintf "&rspn=1&ll=%s&spn=%s" (ll.Value.ToString()) (spn.Value.ToString())
                       | _ -> String.Empty
             sprintf "geocode=%s&results=%d&skip=%d&%s" !?geocode results skip !?loc
-        member x.Geocode () =
-            let url = new Uri("http://geocode-maps.yandex.ru/1.x/?format=json&" + x.ToString())
-            use wc = new WebClient()
-            let res = wc.DownloadString url
+        member private x.Url with get() = new Uri("http://geocode-maps.yandex.ru/1.x/?format=json&" + x.ToString())
+        member private x.Parse res =
             let parsed = JsonSerializer.DeserializeFromString<GeoResponse>(res)
             let resp: GeoCollection = parsed.response
             let gcol: Geo = resp.GeoObjectCollection
-            parsed.response.GeoObjectCollection.featureMember
-                |> Seq.map (fun (i: GeoObjects) -> GeoResult.from_result i.GeoObject)
-        member x.AsyncGeocode () = async {
-            let url = new Uri("http://geocode-maps.yandex.ru/1.x/?format=json&" + x.ToString())
+            gcol.featureMember
+        member private x.Convert (i: GeoObjects) =
+            GeoResult.from_result i.GeoObject
+        member x.Geocode () =
             use wc = new WebClient()
-            let! res = wc.AsyncDownloadString url
-            let parsed = JsonSerializer.DeserializeFromString<GeoResponse>(res)
-            return parsed.response.GeoObjectCollection.featureMember
-                    |> Seq.map (fun (i: GeoObjects) -> GeoResult.from_result i.GeoObject)
+            x.Parse <| wc.DownloadString x.Url |> Seq.map x.Convert
+        member x.AsyncGeocode () = async {
+            use wc = new WebClient()
+            let! res = wc.AsyncDownloadString x.Url
+            let parsed = x.Parse res
+            return parsed |> Seq.map x.Convert
         }
 and Premise () =
     let mutable f = String.Empty

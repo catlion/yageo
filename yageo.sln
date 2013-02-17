@@ -3,19 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{4925A630-B079-445d-BCD4-3A9C94FE9307}") = "yageo", "yageo\yageo.fsproj", "{84DA3523-24D0-4CAA-BA1B-5EAE6772550F}"
 EndProject
+Project("{4925A630-B079-445d-BCD4-3A9C94FE9307}") = "fsharpClient", "examples\fsharpClient\fsharpClient.fsproj", "{7EE2C3FC-32F3-4170-936F-F01B92AD879F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7EE2C3FC-32F3-4170-936F-F01B92AD879F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EE2C3FC-32F3-4170-936F-F01B92AD879F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EE2C3FC-32F3-4170-936F-F01B92AD879F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EE2C3FC-32F3-4170-936F-F01B92AD879F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{84DA3523-24D0-4CAA-BA1B-5EAE6772550F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{84DA3523-24D0-4CAA-BA1B-5EAE6772550F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84DA3523-24D0-4CAA-BA1B-5EAE6772550F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84DA3523-24D0-4CAA-BA1B-5EAE6772550F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = yageo\yageo.fsproj
+		StartupItem = examples\fsharpClient\fsharpClient.fsproj
 		Policies = $0
 		$0.TextStylePolicy = $1
 		$1.inheritsSet = null

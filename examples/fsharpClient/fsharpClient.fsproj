@@ -5,10 +5,10 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{84DA3523-24D0-4CAA-BA1B-5EAE6772550F}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>yagmono</RootNamespace>
-    <AssemblyName>yagmono</AssemblyName>
+    <ProjectGuid>{7EE2C3FC-32F3-4170-936F-F01B92AD879F}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>fsharpClient</RootNamespace>
+    <AssemblyName>fsharpClient</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -16,7 +16,7 @@
     <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <ConsolePause>false</ConsolePause>
+    <Externalconsole>true</Externalconsole>
     <PlatformTarget />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -26,7 +26,7 @@
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <Tailcalls>true</Tailcalls>
-    <ConsolePause>false</ConsolePause>
+    <Externalconsole>true</Externalconsole>
     <PlatformTarget />
   </PropertyGroup>
   <ItemGroup>
@@ -34,14 +34,16 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
-    <Reference Include="System.Web" />
-    <Reference Include="ServiceStack.Text">
-      <HintPath>..\ServiceStack.Text\ServiceStack.Text.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="yageo.fs" />
+    <Compile Include="Program.fs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\..\yageo\yageo.fsproj">
+      <Project>{84DA3523-24D0-4CAA-BA1B-5EAE6772550F}</Project>
+      <Name>yageo</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>
