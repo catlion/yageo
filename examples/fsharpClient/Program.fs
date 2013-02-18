@@ -22,5 +22,6 @@ let main args =
     samples
         |> List.map geocode
         |> Async.Parallel
+        |> Async.Ignore
         |> Async.RunSynchronously
     0
