@@ -1,14 +1,15 @@
-using System;
-using Yageo;
 namespace csharpClient
 {
+    using System;
+    using Yageo;
+
     class MainClass
     {
         static readonly string address = "Москва, Красная площадь";
         public static void Main (string[] args)
         {
-            GeoRequest y = new GeoRequest(address);
-            var x = y.GeoCode();
+            var y = new GeoRequest(address);
+            y.Ge
         }
     }
 }

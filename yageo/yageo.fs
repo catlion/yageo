@@ -4,6 +4,11 @@ open System.Net
 open System.Globalization
 open ServiceStack.Text
 
+module AssemblyAttributes =
+    [<assembly: System.Runtime.InteropServices.ComVisible(false);
+      assembly: System.CLSCompliant(true)>]
+    do()
+
 /// <summary>
 /// На вход геокодер принимает координаты в формате “lon,lat” а на выход отдает в формате “lon lat”,
 /// соответственно реализованы функции ToString и from_string
@@ -26,21 +31,17 @@ type Coords = {
 /// <summary>
 /// Параметры запроса к геокодеру
 /// </summary>
-type GeoRequest(request: string, ?max_count: byte, ?skip:byte, ?area_center: Coords option, ?area_size: Coords option) =
+type GeoRequest(request: string, maxCount: byte, skip:byte, areaCenter: Coords option, areaSize: Coords option) =
     let (!?) (s: string) = s.Trim().Replace(Environment.NewLine, String.Empty) |> System.Web.HttpUtility.UrlEncode
     let mutable geocode = request
-    let ll = defaultArg area_center None
-    let spn = defaultArg area_size None
-    let rspn = if area_center <> None && area_size <> None then 1uy else 0uy
-    let results = defaultArg max_count 10uy
-    let skip = defaultArg skip 0uy
+    let rspn = if areaCenter <> None && areaSize <> None then 1uy else 0uy
     with
         member x.Address with get() = geocode and set(v) = geocode <- v
         override x.ToString() =
             let loc = match rspn with
-                      | 1uy -> sprintf "&rspn=1&ll=%s&spn=%s" (ll.Value.ToString()) (spn.Value.ToString())
+                      | 1uy -> sprintf "&rspn=1&ll=%s&spn=%s" (areaCenter.ToString()) (areaSize.ToString())
                       | _ -> String.Empty
-            sprintf "geocode=%s&results=%d&skip=%d&%s" !?geocode results skip !?loc
+            sprintf "geocode=%s&results=%d&skip=%d&%s" !?geocode maxCount skip !?loc
         member private x.Url with get() = new Uri("http://geocode-maps.yandex.ru/1.x/?format=json&" + x.ToString())
         member private x.Parse res =
             let parsed = JsonSerializer.DeserializeFromString<GeoResponse>(res)
@@ -58,6 +59,10 @@ type GeoRequest(request: string, ?max_count: byte, ?skip:byte, ?area_center: Coo
             let parsed = x.Parse res
             return parsed |> Seq.map x.Convert
         }
+        new(request, maxCount, skip) =
+            GeoRequest(request, maxCount, skip, None, None)
+        new(request) =
+            GeoRequest(request, 10uy, 0uy)
 and Premise () =
     let mutable f = String.Empty
     member x.PremiseNumber with get() = f and set(v) = f <- v
